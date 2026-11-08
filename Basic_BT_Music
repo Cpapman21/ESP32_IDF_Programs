@@ -1,0 +1,29 @@
+#include "AudioTools.h"
+#include "BluetoothA2DPSink.h"
+
+#define I2S_BCLK  26
+#define I2S_LRCLK 25
+#define I2S_DOUT  22
+
+I2SStream out;
+BluetoothA2DPSink a2dp_sink(out);
+
+void setup() {
+  Serial.begin(115200);
+
+  // Configure I2S output
+  auto cfg = out.defaultConfig();
+  cfg.pin_bck = I2S_BCLK;
+  cfg.pin_ws = I2S_LRCLK;
+  cfg.pin_data = I2S_DOUT;
+
+  out.begin(cfg);
+
+  // Start Bluetooth receiver
+  a2dp_sink.start("MyMusic");
+
+  Serial.println("Bluetooth audio ready!");
+}
+
+void loop() {
+}
